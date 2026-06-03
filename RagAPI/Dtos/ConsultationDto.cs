@@ -1,8 +1,8 @@
-﻿namespace RagAPI.Dtos
+namespace RagAPI.Dtos
 {
     public class ConsultationDto
     {
-        public int Id { get; set; }
+        public string Id { get; set; } = string.Empty;
         public string Reason { get; set; } = string.Empty;
         public string FinalDiagnosis { get; set; } = string.Empty;
         public DateTime Date { get; set; }

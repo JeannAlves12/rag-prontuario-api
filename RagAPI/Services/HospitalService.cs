@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using System.Text.Json;
 using RagAPI.Dtos;
 
@@ -7,16 +7,19 @@ namespace RagAPI.Services
     public class HospitalService
     {
         private readonly HttpClient _httpClient;
+        private readonly string _baseUrl;
 
-        public HospitalService(HttpClient httpClient)
+        public HospitalService(HttpClient httpClient, IConfiguration configuration)
         {
             _httpClient = httpClient;
+            _baseUrl = configuration["SiahApiBaseUrl"]
+                ?? throw new InvalidOperationException("A chave 'SiahApiBaseUrl' não foi encontrada no appsettings.json.");
         }
 
-        // NOVO: Método para buscar os dados pessoais do paciente
+        // Busca os dados pessoais do paciente via /profile?cpf=
         public async Task<PatientDto?> GetPatientAsync(string cpf)
         {
-            var response = await _httpClient.GetAsync($"https://localhost:7154/Patients/cpf/{cpf}");
+            var response = await _httpClient.GetAsync($"{_baseUrl}/profile?cpf={cpf}");
 
             if (response.StatusCode == HttpStatusCode.NotFound)
             {
@@ -29,10 +32,10 @@ namespace RagAPI.Services
             return JsonSerializer.Deserialize<PatientDto>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         }
 
-        // MANTIDO: O método que busca as consultas e já estava blindado
+        // Busca as consultas formatadas do paciente via /api/Consultations/patient/{cpf}
         public async Task<List<ConsultationDto>> GetPatientConsultations(string cpf)
         {
-            var response = await _httpClient.GetAsync($"https://localhost:7154/api/Consultations/patient/{cpf}");
+            var response = await _httpClient.GetAsync($"{_baseUrl}/api/Consultations/patient/{cpf}");
 
             if (response.StatusCode == HttpStatusCode.NotFound)
             {
