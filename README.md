@@ -1,31 +1,61 @@
-# 🏥 Sistema de Prontuário Inteligente - RagAPI
+# 🏥 Sistema de Prontuário Inteligente — RAG API
 
-Uma API construída em .NET que utiliza Inteligência Artificial local (LLMs) para gerar resumos clínicos automáticos a partir do histórico de pacientes.
+🇬🇧 **Summary:** .NET 8 API that fetches a patient's consultation history from a hospital API and sends it to a local LLM (Ollama + Phi-3) to produce a structured clinical summary (RAG pattern). Study project; the front-end was built with AI assistance.
 
-## 🚀 O que o projeto faz
-A **RagAPI** atua como um sistema RAG (Retrieval-Augmented Generation). Ela se comunica com um banco de dados hospitalar para buscar o histórico completo de consultas de um paciente e envia esses dados para um modelo de linguagem natural (Ollama), que retorna um resumo estruturado contendo:
-* Diagnóstico Atual
-* Sintomas Recentes
-* Tratamentos Aplicados
-* Resumo Clínico Geral
+🇧🇷 API em **.NET 8** que busca o histórico de consultas de um paciente e usa uma IA local (**Ollama + Phi-3**) para gerar um resumo clínico estruturado.
 
-Este projeto é capaz de resolver conflitos de informações médicas e ignorar dados irrelevantes do histórico pregresso.
+## O que faz
 
-## 🛠️ Tecnologias Utilizadas
-* **C# / .NET 8** (Backend da API)
-* **Ollama** (Servidor de IA Local)
-* **Phi-3** (Modelo de Linguagem Natural / LLM)
-* **Entity Framework / MySQL** (Comunicação de dados através da HospitalAPI)
-* **Vue.js / HTML** (Frontend do Painel Médico)
+Funciona como um sistema **RAG (Retrieval-Augmented Generation)**:
 
-## ⚙️ Pré-requisitos
-Para rodar este projeto na sua máquina, você vai precisar de:
-1. [.NET SDK](https://dotnet.microsoft.com/) instalado.
-2. [Ollama](https://ollama.com/) instalado e rodando.
-3. Modelo Phi-3 baixado no Ollama (rode `ollama run phi3` no terminal).
-4. A API do Banco de Dados Hospitalar rodando localmente.
+1. Recebe o CPF do paciente
+2. Busca o histórico de consultas na API hospitalar (HospitalAPI)
+3. Envia esses dados ao modelo de linguagem, que devolve um resumo com:
+   - Diagnóstico atual
+   - Sintomas recentes
+   - Tratamentos aplicados
+   - Resumo clínico geral
 
-## 📡 Endpoint Principal
+O prompt orienta o modelo a resolver conflitos de informação e ignorar dados irrelevantes do histórico antigo.
 
-`GET /api/Rag/summary/{cpf}`
-Retorna o resumo gerado pela IA para o CPF informado.
+## Arquitetura
+
+```
+Painel (HTML/Vue) ──► RagAPI (.NET 8) ──► HospitalAPI (dados)
+                          │
+                          └──► Ollama + Phi-3 (resumo)
+```
+
+> A **HospitalAPI** é uma API externa a este repositório, que fornece os dados dos pacientes. Este projeto contém apenas o RAG e o painel.
+
+## Tecnologias
+
+- C# / .NET 8 (API)
+- Ollama + Phi-3 (LLM local)
+- Entity Framework / MySQL (dados via HospitalAPI)
+- Vue.js / HTML (painel médico, **desenvolvido com apoio de IA**)
+
+## Pré-requisitos
+
+1. [.NET SDK](https://dotnet.microsoft.com/)
+2. [Ollama](https://ollama.com/) rodando
+3. Modelo baixado: `ollama run phi3`
+4. HospitalAPI rodando localmente
+
+## Como rodar
+
+```bash
+git clone https://github.com/JeannAlves12/rag-prontuario-api
+cd rag-prontuario-api
+dotnet run --project RagAPI
+```
+
+## Endpoint
+
+`GET /api/Rag/summary/{cpf}` — retorna o resumo gerado pela IA para o CPF informado.
+
+## ⚠️ Aviso
+
+Projeto de estudo. Modelos de linguagem podem errar, e o resumo **não substitui avaliação médica**. Use apenas dados fictícios.
+
+Documentação adicional em [`doc.md`](doc.md).
