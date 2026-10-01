@@ -32,7 +32,7 @@ Painel (HTML/Vue) ──► RagAPI (.NET 8) ──► HospitalAPI (dados)
 
 - C# / .NET 8 (API)
 - Ollama + Phi-3 (LLM local)
-- Entity Framework / MySQL (dados via HospitalAPI)
+- Dados vindos da HospitalAPI (API externa, fora deste repositório)
 - Vue.js / HTML (painel médico, **desenvolvido com apoio de IA**)
 
 ## Pré-requisitos
